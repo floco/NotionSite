@@ -40,7 +40,7 @@ jobs:
           EOF
 
       - name: Run Loconotion
-        run: python loconotion ${GITHUB_WORKSPACE}/loconotion/example\example_site.toml
+        run: python loconotion ${GITHUB_WORKSPACE}/loconotion/example/example_site.toml
 
       - name: Deploy to Pages
         uses: JamesIves/github-pages-deploy-action@3.7.1
