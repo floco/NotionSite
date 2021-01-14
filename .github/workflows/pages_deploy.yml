@@ -17,8 +17,8 @@ jobs:
         run: |
           git submodule update --init --recursive
           git submodule update --remote
+          sudo apt install chromium-browser
 
-      - run: sudo apt install chromium-browser
       - name: Set up Chromedriver
         uses: nanasess/setup-chromedriver@master
         with:
@@ -35,11 +35,11 @@ jobs:
           ${{ secrets.SITE_CONFIG }}
           EOF
 
-      - name: Install Dependencies
+      - name: Install and Run
         run: |
           cd ${GITHUB_WORKSPACE}/loconotion
           pip install -r requirements.txt
-          python loconotion example/example_site.toml
+          python loconotion example/example_site.toml > test.log 2>&1
 
       - name: Deploy to Pages
         uses: JamesIves/github-pages-deploy-action@3.7.1
