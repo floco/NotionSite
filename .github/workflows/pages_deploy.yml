@@ -1,0 +1,52 @@
+name: Deploy to Pages
+
+on:
+  schedule:
+    - cron: 0 */6 * * *
+  workflow_dispatch:
+    inputs:
+    
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Submodule Update
+        run: |
+          git submodule update --init --recursive
+          git submodule update --remote
+
+      - name: Set up Chromedriver
+        uses: nanasess/setup-chromedriver@master
+        with:
+          chromedriver-version: '87.0.4280.88'
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.8
+
+      - name: Install Dependencies
+        run: |
+          cd ${GITHUB_WORKSPACE}/loconotion
+          pip install -r requirements.txt
+
+      - name: Configuration File
+        run: |
+          cat >  ${GITHUB_WORKSPACE}/loconotion/example/example_site.toml  << EOF
+          ${{ secrets.SITE_CONFIG }}
+          EOF
+
+      - name: Run Loconotion
+        run: python loconotion example\example_site.toml
+
+      - name: Deploy to Pages
+        uses: JamesIves/github-pages-deploy-action@3.7.1
+        with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          BRANCH: gh-pages
+          FOLDER: loconotion/dist
+          CLEAN: true
+          SINGLE_COMMIT: true
