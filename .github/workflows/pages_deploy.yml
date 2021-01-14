@@ -49,3 +49,9 @@ jobs:
           FOLDER: loconotion/dist
           CLEAN: true
           SINGLE_COMMIT: true
+
+      - name: Delete workflow runs
+        uses: Mattraks/delete-workflow-runs@main
+        with:
+          retain_days: 2
+          keep_minimum_runs: 6
