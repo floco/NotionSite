@@ -18,6 +18,7 @@ jobs:
           git submodule update --init --recursive
           git submodule update --remote
 
+      - run: sudo apt install google-chrome-stable
       - name: Set up Chromedriver
         uses: nanasess/setup-chromedriver@master
         with:
