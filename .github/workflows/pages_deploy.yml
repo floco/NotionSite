@@ -28,19 +28,17 @@ jobs:
         with:
           python-version: 3.8
 
-      - name: Install Dependencies
-        run: |
-          cd ${GITHUB_WORKSPACE}/loconotion
-          pip install -r requirements.txt
-
       - name: Configuration File
         run: |
           cat >  ${GITHUB_WORKSPACE}/loconotion/example/example_site.toml  << EOF
           ${{ secrets.SITE_CONFIG }}
           EOF
 
-      - name: Run Loconotion
-        run: python loconotion ${GITHUB_WORKSPACE}/loconotion/example/example_site.toml
+      - name: Install Dependencies
+        run: |
+          cd ${GITHUB_WORKSPACE}/loconotion
+          pip install -r requirements.txt
+          python loconotion example/example_site.toml
 
       - name: Deploy to Pages
         uses: JamesIves/github-pages-deploy-action@3.7.1
